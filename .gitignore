@@ -45,3 +45,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Delete compilation files
+interfaces\Debug
+interfaces\Release
+tier1\Debug
+tier1\Release
+vgui2\vgui_controls\Debug
+vgui2\vgui_controls\Release
