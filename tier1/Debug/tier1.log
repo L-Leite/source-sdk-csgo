@@ -1,0 +1,30 @@
+﻿  utlsymbol.cpp
+  utlstring.cpp
+  utlbufferutil.cpp
+  utlbuffer.cpp
+  uniqueid.cpp
+  tier1.cpp
+  strtools.cpp
+  stringpool.cpp
+  rangecheckedvar.cpp
+  processor_detect.cpp
+  newbitbuf.cpp
+  NetAdr.cpp
+  memstack.cpp
+  mempool.cpp
+  KeyValues.cpp
+  interface.cpp
+  generichash.cpp
+  diff.cpp
+  datamanager.cpp
+  convar.cpp
+  Generating Code...
+  Compiling...
+  commandbuffer.cpp
+  checksum_md5.cpp
+  checksum_crc.cpp
+  characterset.cpp
+  byteswap.cpp
+  bitbuf.cpp
+  Generating Code...
+  tier1.vcxproj -> C:\Projects\ClassicOffensive\sdk\tier1\..\lib\public\tier1.lib
