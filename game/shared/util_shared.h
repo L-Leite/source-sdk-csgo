@@ -354,39 +354,9 @@ inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, 
 	}
 }
 
-inline void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, const Vector &hullMin, 
+void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, const Vector &hullMin, 
 					 const Vector &hullMax,	unsigned int mask, const IHandleEntity *ignore, 
-					 int collisionGroup, trace_t *ptr )
-{
-	BeginDetectTraceSpike();
-	Ray_t ray;
-	ray.Init( vecAbsStart, vecAbsEnd, hullMin, hullMax );
-	CTraceFilterSimple traceFilter( ignore, collisionGroup );
-
-	enginetrace->TraceRay( ray, mask, &traceFilter, ptr );
-	EndDetectTraceSpike();
-
-	if( r_visualizetraces.GetBool() || DidTraceSpike() )
-	{
-		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 255, 0, true, ( r_visualizetraces.GetBool() ) ? -1.0f : .5 );
-		ReportExpensiveTrace( false );
-		if ( DidTraceSpike() ) // Opimizer will remove this block
-		{
-			BeginDetectTraceSpike();
-			Ray_t ray;
-			ray.Init( vecAbsStart, vecAbsEnd, hullMin, hullMax );
-			CTraceFilterSimple traceFilter( ignore, collisionGroup );
-
-			enginetrace->TraceRay( ray, mask, &traceFilter, ptr );
-			EndDetectTraceSpike();
-
-			if ( DidTraceSpike() )
-			{
-				ReportExpensiveTrace( true );
-			}
-		}
-	}
-}
+					 int collisionGroup, trace_t *ptr );
 
 inline void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, const Vector &hullMin, 
 					 const Vector &hullMax,	unsigned int mask, ITraceFilter *pFilter, trace_t *ptr )

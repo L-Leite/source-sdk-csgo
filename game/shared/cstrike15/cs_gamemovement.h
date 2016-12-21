@@ -80,7 +80,7 @@ public:
 	virtual float ClimbSpeed( void ) const;
 	virtual float LadderLateralMultiplier( void ) const;
 
-protected:
+public:
 	virtual void PlayerMove();
 
 	void CheckForLadders( bool wasOnGround );

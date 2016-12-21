@@ -47,8 +47,8 @@ CCSAmmoDef* GetCSAmmoDef()
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_9MM ) ].buySize = 30;
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_45ACP ) ].cost = 25;
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_45ACP ) ].buySize = 12;
-		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG ) ].cost = 25; // This is hkp2000 i think
-		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG ) ].buySize = 12;
+		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG_SMALL ) ].cost = 25; // This is hkp2000 i think
+		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG_SMALL ) ].buySize = 12;
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG_P250 ) ].cost = 50;
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_357SIG_P250 ) ].buySize = 13;
 		res->m_csAmmo[ res->Index( BULLET_PLAYER_50AE ) ].cost = 40;
