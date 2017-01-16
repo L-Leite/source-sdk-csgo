@@ -275,7 +275,13 @@ public:
 	static inline bool Debug_Step(void);
 
 	static bool				m_bInDebugSelect;
-	static int				m_nDebugPlayer;
+	static int*				m_nDebugPlayer;
+
+	static int				GetDebugPlayer()
+	{
+		Assert( m_nDebugPlayer );
+		return *m_nDebugPlayer;
+	}
 
 protected:
 

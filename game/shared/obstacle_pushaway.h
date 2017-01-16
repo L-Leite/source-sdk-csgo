@@ -44,7 +44,7 @@ public:
 #ifdef CLIENT_DLL
 		CBaseEntity *pEnt = ClientEntityList().GetBaseEntityFromHandle( pHandleEntity->GetRefEHandle() );
 #else
-		CBaseEntity *pEnt = gEntList.GetBaseEntity( pHandleEntity->GetRefEHandle() );
+		CBaseEntity *pEnt = gEntList->GetBaseEntity( pHandleEntity->GetRefEHandle() );
 #endif // CLIENT_DLL
 
 		if ( IsPushAwayEntity( pEnt ) && m_nAlreadyHit < m_nMaxHits )
@@ -79,7 +79,7 @@ public:
 
 	virtual IterationRetval_t EnumElement( IHandleEntity *pHandleEntity )
 	{
-		CBaseEntity *pEnt = gEntList.GetBaseEntity( pHandleEntity->GetRefEHandle() );
+		CBaseEntity *pEnt = gEntList->GetBaseEntity( pHandleEntity->GetRefEHandle() );
 
 		if ( !IsBreakableEntity( pEnt ) )
 			return ITERATION_CONTINUE;
@@ -114,7 +114,7 @@ public:
 
 	virtual IterationRetval_t EnumElement( IHandleEntity *pHandleEntity )
 	{
-		CBaseEntity *pEnt = gEntList.GetBaseEntity( pHandleEntity->GetRefEHandle() );
+		CBaseEntity *pEnt = gEntList->GetBaseEntity( pHandleEntity->GetRefEHandle() );
 
 		if ( pEnt == NULL )
 			return ITERATION_CONTINUE;

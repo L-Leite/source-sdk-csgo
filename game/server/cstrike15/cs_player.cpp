@@ -18,8 +18,8 @@ void CCSPlayer::AddAccount( int amount, bool bTrackChange )
 
 	if ( m_iAccount < 0 )
 		m_iAccount = 0;
-	else if ( m_iAccount > 16000 )
-		m_iAccount = 16000;
+	/*else if ( m_iAccount > 16000 )
+		m_iAccount = 16000;*/
 }
 
 void CCSPlayer::HintMessage( const char* pMessage, bool bDisplayIfDead, bool bOverrideClientSettings /*= false*/ )
@@ -27,7 +27,7 @@ void CCSPlayer::HintMessage( const char* pMessage, bool bDisplayIfDead, bool bOv
 	using fn_t = bool(__thiscall*)( CHintMessageQueue*, const char*, CHintMessageQueue* );
 
 	if ( bDisplayIfDead || IsAlive() )
-		( (fn_t) Addresses::HintMessage)( m_pHintMessageQueue, pMessage, m_pHintMessageQueue);
+		((fn_t)Addresses::HintMessage)( m_pHintMessageQueue, pMessage, m_pHintMessageQueue);
 }
 
 bool CCSPlayer::CanPlayerBuy( bool display )
@@ -136,7 +136,6 @@ bool CCSPlayer::HandleCommand_JoinClass( int iClass )
 
 	if ( m_iClass != iClass )
 	{
-		NetworkProp()->NetworkStateChanged( offsetof( CCSPlayer, m_iClass ) );
 		m_iClass = iClass;
 		SetModelFromClass();		
 	}
@@ -220,7 +219,7 @@ void CCSPlayer::ResetMaxSpeed()
 		speed = 240;
 	}						 
 
-	SetMaxSpeed( 500 );
+	SetMaxSpeed( speed );
 }
 
 CWeaponCSBase* CCSPlayer::GetActiveCSWeapon() const

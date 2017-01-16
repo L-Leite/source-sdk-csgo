@@ -1,4 +1,76 @@
 #include "stdafx.h"
+						 
+#ifdef CLIENT_DLL
+#include "iclientvehicle.h"
+#else						  
+#include "iservervehicle.h"
+#endif
+
+//-----------------------------------------------------------------------------
+// Purpose: Update the vehicle view, or simply return the cached position and angles
+//-----------------------------------------------------------------------------
+void CBasePlayer::CacheVehicleView( void )
+{
+	// If we've calculated the view this frame, then there's no need to recalculate it
+	if ( m_nVehicleViewSavedFrame == gpGlobals->framecount )
+		return;
+
+#ifdef CLIENT_DLL
+	IClientVehicle *pVehicle = GetVehicle();
+#else
+	IServerVehicle *pVehicle = GetVehicle();
+#endif
+
+	if ( pVehicle != NULL )
+	{
+		int nRole = pVehicle->GetPassengerRole( this );
+
+		// Get our view for this frame
+		pVehicle->GetVehicleViewPosition( nRole, &m_vecVehicleViewOrigin, &m_vecVehicleViewAngles, &m_flVehicleViewFOV );
+		m_nVehicleViewSavedFrame = gpGlobals->framecount;
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Returns eye vectors
+//-----------------------------------------------------------------------------
+void CBasePlayer::EyeVectors( Vector *pForward, Vector *pRight, Vector *pUp )
+{
+	if ( GetVehicle() != NULL )
+	{
+		// Cache or retrieve our calculated position in the vehicle
+		CacheVehicleView();
+		AngleVectors( m_vecVehicleViewAngles, pForward, pRight, pUp );
+	}
+	else
+	{
+		AngleVectors( EyeAngles(), pForward, pRight, pUp );
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Returns the eye position and angle vectors.
+//-----------------------------------------------------------------------------
+void CBasePlayer::EyePositionAndVectors( Vector *pPosition, Vector *pForward,
+	Vector *pRight, Vector *pUp )
+{
+	// Handle the view in the vehicle
+	if ( GetVehicle() != NULL )
+	{
+		CacheVehicleView();
+		AngleVectors( m_vecVehicleViewAngles, pForward, pRight, pUp );
+
+		if ( pPosition != NULL )
+		{
+			*pPosition = m_vecVehicleViewOrigin;
+		}
+	}
+	else
+	{
+		VectorCopy( BaseClass::EyePosition(), *pPosition );
+		AngleVectors( EyeAngles(), pForward, pRight, pUp );
+	}
+}
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the FOV of the client, doing interpolation between old and new if requested

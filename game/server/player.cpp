@@ -5,15 +5,15 @@ int CBasePlayer::GetFOV( void )
 	int nDefaultFOV;
 
 	// The vehicle's FOV wins if we're asking for a default value
-	/*if ( GetVehicle() )
+	if ( GetVehicle() )
 	{
 		CacheVehicleView();
 		nDefaultFOV = ( m_flVehicleViewFOV == 0 ) ? GetDefaultFOV() : (int) m_flVehicleViewFOV;
 	}
 	else
-	{*/
+	{
 		nDefaultFOV = GetDefaultFOV();
-	//}
+	}
 	
 	int fFOV = ( m_iFOV == 0 ) ? nDefaultFOV : m_iFOV;
 
@@ -35,3 +35,33 @@ int CBasePlayer::GetFOV( void )
 
 	return fFOV;
 }
+
+//-----------------------------------------------------------------------------
+// Eye angles
+//-----------------------------------------------------------------------------
+const QAngle &CBasePlayer::EyeAngles()
+{
+	// NOTE: Viewangles are measured *relative* to the parent's coordinate system
+	CBaseEntity *pMoveParent = const_cast<CBasePlayer*>(this)->GetMoveParent();
+
+	if ( !pMoveParent )
+	{
+		return pl.v_angle;
+	}
+
+	// FIXME: Cache off the angles?
+	matrix3x4_t eyesToParent, eyesToWorld;
+	AngleMatrix( pl.v_angle, eyesToParent );
+	ConcatTransforms( pMoveParent->EntityToWorldTransform(), eyesToParent, eyesToWorld );
+
+	static QAngle angEyeWorld;
+	MatrixAngles( eyesToWorld, angEyeWorld );
+	return angEyeWorld;
+}
+
+
+const QAngle &CBasePlayer::LocalEyeAngles()
+{
+	return pl.v_angle;
+}
+

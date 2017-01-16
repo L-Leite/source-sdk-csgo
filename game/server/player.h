@@ -1242,10 +1242,13 @@ protected:
 	int		m_nBodyPitchPoseParam;
 
 	// last known navigation area of player - NULL if unknown
-	CNavArea *m_lastNavArea;
+	//CNavArea *m_lastNavArea;
 	CNetworkString( m_szLastPlaceName, MAX_PLACE_NAME_LENGTH );
 
 	char m_szNetworkIDString[MAX_NETWORKID_LENGTH];
+
+	int Padd00;
+
 	CPlayerInfo m_PlayerInfo;
 
 	// Texture names and surface data, used by CGameMovement
@@ -1301,6 +1304,8 @@ private:
 	// One for left and one for right side of step
 	StepSoundCache_t		m_StepSoundCache[ 2 ];
 
+	int BustAPad;
+
 	CUtlLinkedList< CPlayerSimInfo >  m_vecPlayerSimInfo;
 	CUtlLinkedList< CPlayerCmdInfo >  m_vecPlayerCmdInfo;
 
@@ -1316,7 +1321,7 @@ private:
 	// If we have any attached split users, this is the list of them
 	CUtlVector< CHandle< CBasePlayer > > m_hSplitScreenPlayers;
 
-	uint8_t PlayerPad10[ 0x50 ];
+	uint8_t PlayerPad10[ 0x54 ];
 
 private:
 	float	GetAutoaimScore( const Vector &eyePosition, const Vector &viewDir, const Vector &vecTarget, CBaseEntity *pTarget, float fScale, CBaseCombatWeapon *pActiveWeapon );

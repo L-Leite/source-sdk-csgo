@@ -92,6 +92,7 @@ class IVGuiRenderSurface;
 class IClientEntityList;
 class IEngineVGui;
 class IEngineTrace;
+class IGameEventManager2;
 
 namespace vgui
 {

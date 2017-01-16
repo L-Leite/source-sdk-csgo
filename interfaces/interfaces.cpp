@@ -10,7 +10,6 @@
 #include "tier0/dbg.h"
 #include "eiface.h"
 #include "cdll_int.h"
-#include "ienginevgui.h"
 
 ICvar *cvar, *g_pCVar;
 IEventSystem *g_pEventSystem;
@@ -62,13 +61,6 @@ IWorldRendererMgr *g_pWorldRendererMgr;
 IVGuiRenderSurface *g_pVGuiRenderSurface;
 IMatchFramework *g_pMatchFramework;
 IGameUISystemMgr *g_pGameUISystemMgr;
-IVEngineServer* g_pEngineServer;
-IServerGameDLL* g_pServerGameDLL;
-IBaseClientDLL* g_pClientDLL;
-IVEngineClient* g_pEngineClient;
-IEngineVGui *enginevgui;
-IEngineTrace *enginetrace;
-IVModelInfo *modelinfo;
 
 struct InterfaceGlobals_t
 {
@@ -138,10 +130,6 @@ static const InterfaceGlobals_t g_pInterfaceGlobals[] =
 	{ RENDER_SYSTEM_SURFACE_INTERFACE_VERSION, &g_pVGuiRenderSurface },
 	{ MATCHFRAMEWORK_INTERFACE_VERSION, &g_pMatchFramework },
 	{ GAMEUISYSTEMMGR_INTERFACE_VERSION, &g_pGameUISystemMgr },
-	{ INTERFACEVERSION_VENGINESERVER, &g_pEngineServer },
-	{ INTERFACEVERSION_SERVERGAMEDLL, &g_pServerGameDLL },
-	{ VENGINE_CLIENT_INTERFACE_VERSION, &g_pEngineClient },
-	{ VENGINE_VGUI_VERSION, &enginevgui }
 };
 
 static const int NUM_INTERFACES = sizeof(g_pInterfaceGlobals) / sizeof(InterfaceGlobals_t);

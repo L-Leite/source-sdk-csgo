@@ -179,7 +179,7 @@ protected:
 
 };
 
-extern CGlobalEntityList gEntList;
+extern CGlobalEntityList* gEntList;
 
 
 //-----------------------------------------------------------------------------

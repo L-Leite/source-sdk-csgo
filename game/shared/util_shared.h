@@ -301,7 +301,7 @@ inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, 
 	enginetrace->TraceRay( ray, mask, &traceFilter, ptr );
 	EndDetectTraceSpike();
 
-	if( r_visualizetraces.GetBool() || DidTraceSpike() )
+	/*if( r_visualizetraces.GetBool() || DidTraceSpike() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 0, 0, true, ( r_visualizetraces.GetBool() ) ? -1.0f : .5 );
 		ReportExpensiveTrace( false );
@@ -320,7 +320,7 @@ inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, 
 				ReportExpensiveTrace( true );
 			}
 		}
-	}
+	}*/
 }
 
 inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, 
@@ -333,7 +333,7 @@ inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, 
 	enginetrace->TraceRay( ray, mask, pFilter, ptr );
 	EndDetectTraceSpike();
 
-	if( r_visualizetraces.GetBool() || DidTraceSpike() )
+	/*if( r_visualizetraces.GetBool() || DidTraceSpike() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 0, 0, true, ( r_visualizetraces.GetBool() ) ? -1.0f : .5 );
 		ReportExpensiveTrace( false );
@@ -351,7 +351,7 @@ inline void UTIL_TraceLine( const Vector& vecAbsStart, const Vector& vecAbsEnd, 
 				ReportExpensiveTrace( true );
 			}
 		}
-	}
+	}*/
 }
 
 void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, const Vector &hullMin, 
@@ -368,7 +368,7 @@ inline void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, 
 	enginetrace->TraceRay( ray, mask, pFilter, ptr );
 
 	EndDetectTraceSpike();
-	if( r_visualizetraces.GetBool() || DidTraceSpike() )
+	/*if( r_visualizetraces.GetBool() || DidTraceSpike() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 255, 0, true, ( r_visualizetraces.GetBool() ) ? -1.0f : .5 );
 		ReportExpensiveTrace( false );
@@ -386,7 +386,7 @@ inline void UTIL_TraceHull( const Vector &vecAbsStart, const Vector &vecAbsEnd, 
 				ReportExpensiveTrace( true );
 			}
 		}
-	}
+	}*/
 }
 
 inline void UTIL_TraceRay( const Ray_t &ray, unsigned int mask, 
@@ -396,10 +396,10 @@ inline void UTIL_TraceRay( const Ray_t &ray, unsigned int mask,
 
 	enginetrace->TraceRay( ray, mask, &traceFilter, ptr );
 	
-	if( r_visualizetraces.GetBool() )
+	/*if( r_visualizetraces.GetBool() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 0, 0, true, -1.0f );
-	}
+	}*/
 }
 
 inline void UTIL_TraceRay( const Ray_t &ray, unsigned int mask, 
@@ -407,10 +407,10 @@ inline void UTIL_TraceRay( const Ray_t &ray, unsigned int mask,
 {
 	enginetrace->TraceRay( ray, mask, pFilter, ptr );
 
-	if( r_visualizetraces.GetBool() )
+	/*if( r_visualizetraces.GetBool() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 0, 0, true, -1.0f );
-	}
+	}*/
 }
 // Sweeps a particular entity through the world
 void UTIL_TraceEntity( CBaseEntity *pEntity, const Vector &vecAbsStart, const Vector &vecAbsEnd, unsigned int mask, trace_t *ptr );
