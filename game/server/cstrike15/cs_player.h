@@ -296,8 +296,6 @@ public:
 	void FireBullet( 
 		Vector vecSrc, 
 		const QAngle &shootAngles, 
-		float vecSpread, 
-		float flDistance, 
 		int iPenetration, 
 		int iBulletType, 
 		int iDamage, 
@@ -320,6 +318,13 @@ public:
 		int iBulletType, 
 		float &fPenetrationPower, 
 		float &flPenetrationDistance );
+
+	static int* s_BulletGroupCounter; 
+
+	static int GetBulletGroup()
+	{
+		return *s_BulletGroupCounter;
+	}
 
 	// Returns true if the player is allowed to move.
 	bool CanMove() const;

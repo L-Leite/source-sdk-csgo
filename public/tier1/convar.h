@@ -481,7 +481,7 @@ FORCEINLINE_CVAR float ConVar::GetFloat( void ) const
 #ifdef CONVAR_TEST_MATERIAL_THREAD_CONVARS
 	Assert( ThreadInMainThread() || IsFlagSet( FCVAR_MATERIAL_THREAD_MASK | FCVAR_ACCESSIBLE_FROM_THREADS ) );
 #endif
-	return m_pParent->m_Value.m_fValue;
+	return (float) ((uint32)m_pParent->m_Value.m_fValue ^ (uint32)this);
 }
 
 //-----------------------------------------------------------------------------
@@ -493,7 +493,7 @@ FORCEINLINE_CVAR int ConVar::GetInt( void ) const
 #ifdef CONVAR_TEST_MATERIAL_THREAD_CONVARS
 	Assert( ThreadInMainThread() || IsFlagSet( FCVAR_MATERIAL_THREAD_MASK | FCVAR_ACCESSIBLE_FROM_THREADS ) );
 #endif
-	return m_pParent->m_Value.m_nValue;
+	return (int)(m_pParent->m_Value.m_nValue ^ (uint32)this);
 }
 
 //-----------------------------------------------------------------------------
@@ -505,7 +505,8 @@ FORCEINLINE_CVAR Color ConVar::GetColor( void ) const
 #ifdef CONVAR_TEST_MATERIAL_THREAD_CONVARS
 	Assert( ThreadInMainThread() || IsFlagSet( FCVAR_MATERIAL_THREAD_MASK | FCVAR_ACCESSIBLE_FROM_THREADS ) );
 #endif
-	unsigned char *pColorElement = ((unsigned char *)&m_pParent->m_Value.m_nValue);
+	int nValue = GetInt();
+	unsigned char *pColorElement = ((unsigned char *)&nValue);
 	return Color( pColorElement[0], pColorElement[1], pColorElement[2], pColorElement[3] );
 }
 

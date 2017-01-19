@@ -29,6 +29,7 @@ public:
 					CTakeDamageInfo();
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, float flDamage, int bitsDamageType, int iKillType = 0 );
+					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, float flDamage, int bitsDamageType, int iKillType = 0, int iObjectsPenetrated = 0 );
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 	
@@ -83,8 +84,15 @@ public:
 	float			GetRadius() const;
 	void			SetRadius( float fRadius );
 
+	uint32			GetBulletID() const;
+	void			SetBulletID( uint32 bulletID );
+
+	uint8			GetRecoilIndex() const;
+	void			SetRecoilIndex( uint8 recoilIndex );
+
 	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, float flDamage, int bitsDamageType, int iKillType = 0 );
 	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, float flDamage, int bitsDamageType, int iKillType = 0 );
+	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, float flDamage, int bitsDamageType, int iKillType = 0, int iObjectsPenetrated = 0 );
 	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 	void			Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 
@@ -100,7 +108,7 @@ public:
 	void			CopyDamageToBaseDamage();
 
 protected:
-	void			Init( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType );
+	void			Init( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, const Vector &damageForce, const Vector &damagePosition, const Vector &reportedPosition, float flDamage, int bitsDamageType, int iKillType, int iObjectsPenetrated );
 
 	Vector			m_vecDamageForce;
 	Vector			m_vecDamagePosition;
@@ -348,6 +356,26 @@ inline float CTakeDamageInfo::GetRadius() const
 inline void CTakeDamageInfo::SetRadius( float flRadius )
 {
 	m_flRadius = flRadius;
+}
+
+inline uint32 CTakeDamageInfo::GetBulletID() const
+{
+	return m_uiBulletID;
+}
+
+inline void CTakeDamageInfo::SetBulletID( uint32 bulletID )
+{
+	m_uiBulletID = bulletID;
+}
+
+inline uint8 CTakeDamageInfo::GetRecoilIndex() const
+{
+	return m_uiBulletID;
+}
+
+inline void CTakeDamageInfo::SetRecoilIndex( uint8 recoilIndex )
+{
+	m_uiRecoilIndex = recoilIndex;
 }
 
 

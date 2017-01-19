@@ -73,7 +73,7 @@ void ConVar_Register( int nCVarFlag, IConCommandBaseAccessor *pAccessor )
 
 	ConCommandBase *pCur, *pNext;
 
-	ConCommandBase::s_pAccessor = pAccessor ? pAccessor : &s_DefaultAccessor;
+	//ConCommandBase::s_pAccessor = pAccessor ? pAccessor : &s_DefaultAccessor;
 	pCur = ConCommandBase::s_pConCommandBases;
 	while ( pCur )
 	{
@@ -186,10 +186,7 @@ void ConCommandBase::Create( const char *pName, const char *pHelpString /*= 0*/,
 
 	// If s_pAccessor is already set (this ConVar is not a global variable),
 	//  register it.
-	if ( s_pAccessor )
-	{
-		Init();
-	}
+	Init();
 }
 
 
@@ -198,9 +195,10 @@ void ConCommandBase::Create( const char *pName, const char *pHelpString /*= 0*/,
 //-----------------------------------------------------------------------------
 void ConCommandBase::Init()
 {
-	if ( s_pAccessor )
+	if ( g_pCVar )
 	{
-		s_pAccessor->RegisterConCommandBase( this );
+		g_pCVar->RegisterConCommand( this );
+		Msg( "Registed %s %s...\n", IsCommand() ? "command" : "convar", GetName() );
 	}
 }
 
@@ -550,7 +548,7 @@ ConCommand::ConCommand( const char *pName, FnCommandCallback_t callback, const c
 
 	if ( !pFn )
 	{
-		pFn = (fn_t) ( (DWORD) GetModuleHandleW( L"client.dll" ) + 0x710F40 );//SearchPattern( L"client.dll", "\x55\x8B\xEC\x8B\x45\x0C\x56\x8B\xF1\x89\x46\x18", "xxxxxxxxxxxx" );
+		pFn = (fn_t) ( (uint32) GetModuleHandleW( L"client.dll" ) + 0x710F40 );//SearchPattern( L"client.dll", "\x55\x8B\xEC\x8B\x45\x0C\x56\x8B\xF1\x89\x46\x18", "xxxxxxxxxxxx" );
 		wprintf_s( L"ConCommand::ConCommand: %p\n", pFn );
 	}
 
@@ -890,7 +888,7 @@ bool ConVar::ClampValue( float& value )
 //-----------------------------------------------------------------------------
 void ConVar::InternalSetFloatValue( float fNewValue )
 {
-	if ( fNewValue == m_Value.m_fValue )
+	if ( ((uint32) this ^ (uint32) fNewValue) == m_Value.m_fValue )
 		return;
 
 	Assert( m_pParent == this ); // Only valid for root convars.
@@ -900,8 +898,8 @@ void ConVar::InternalSetFloatValue( float fNewValue )
 
 	// Redetermine value
 	float flOldValue = m_Value.m_fValue;
-	m_Value.m_fValue		= fNewValue;
-	m_Value.m_nValue		= ( int )fNewValue;
+	*(uint32*)&m_Value.m_fValue = *(uint32*)&fNewValue ^ (uint32)this;
+	*(uint32*)&m_Value.m_nValue = *(uint32*)&fNewValue ^ (uint32)this;
 
 	if ( !( m_nFlags & FCVAR_NEVER_AS_STRING ) )
 	{
@@ -934,8 +932,8 @@ void ConVar::InternalSetIntValue( int nValue )
 
 	// Redetermine value
 	float flOldValue = m_Value.m_fValue;
-	m_Value.m_fValue		= fValue;
-	m_Value.m_nValue		= nValue;
+	*(uint32*)&m_Value.m_fValue = *(uint32*)&fValue ^ (uint32)this;
+	*(uint32*)&m_Value.m_nValue = *(uint32*)&nValue ^ (uint32)this;
 
 	if ( !( m_nFlags & FCVAR_NEVER_AS_STRING ) )
 	{
@@ -986,7 +984,7 @@ void ConVar::Create( const char *pName, const char *pDefaultValue, int flags /*=
 	if (callback)
 		m_fnChangeCallbacks.AddToTail(callback);
 
-	m_Value.m_fValue = ( float )atof( m_Value.m_pszString );
+	m_Value.m_fValue = ((uint32)this ^ (uint32)(float)atof( m_Value.m_pszString ) );
 
 	// Bounds Check, should never happen, if it does, no big deal
 	if ( m_bHasMin && ( m_Value.m_fValue < m_fMinVal ) )
@@ -999,7 +997,7 @@ void ConVar::Create( const char *pName, const char *pDefaultValue, int flags /*=
 		Assert( 0 );
 	}
 
-	m_Value.m_nValue = ( int )m_Value.m_fValue;
+	m_Value.m_nValue = ((uint32)this ^ (uint32)(int)m_Value.m_fValue);
 
 	BaseClass::Create( pName, pHelpString, flags );
 }

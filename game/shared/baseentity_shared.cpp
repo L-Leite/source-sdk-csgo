@@ -120,21 +120,3 @@ void CBaseEntity::DispatchTraceAttack( const CTakeDamageInfo &info, const Vector
 
 	TraceAttack( info, vecDir, ptr );
 }
-
-void CBaseEntity::TraceAttack( const CTakeDamageInfo &info, const Vector &vecDir, trace_t *ptr )
-{
-	Vector vecOrigin = ptr->endpos - vecDir * 4;
-
-	if ( m_takedamage )
-	{
-		AddMultiDamage( info, this );
-
-		int blood = BloodColor();
-
-		if ( blood != DONT_BLEED )
-		{
-			SpawnBlood( vecOrigin, vecDir, blood, info.GetDamage() );// a little surface blood.
-			TraceBleed( info.GetDamage(), vecDir, ptr, info.GetDamageType() );
-		}
-	}
-}

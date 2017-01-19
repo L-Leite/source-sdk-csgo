@@ -30,7 +30,12 @@
 #include "props_shared.h"
 
 extern ConVar* sv_showimpacts;
+extern ConVar* sv_showimpacts_time;
 extern ConVar* sv_showplayerhitboxes;
+
+ConVar mp_penetration_max_distance( "mp_penetration_max_distance", "1280", FCVAR_REPLICATED, "Sets the maximum distance in inches that a bullet can penetrate." );
+ConVar mp_penetration_override( "mp_penetration_override", "0", FCVAR_REPLICATED, "Overrides every weapon's penetration values." );
+ConVar mp_penetration_override_num( "mp_penetration_override_num", "0", FCVAR_REPLICATED, "Ammount of penetration to override the default one's." );
 
 #define	CS_MASK_SHOOT (MASK_SOLID|CONTENTS_DEBRIS)
 
@@ -176,17 +181,15 @@ inline void UTIL_TraceLineIgnoreTwoEntities( const Vector& vecAbsStart, const Ve
 	ray.Init( vecAbsStart, vecAbsEnd );
 	CTraceFilterSkipTwoEntities traceFilter( ignore, ignore2, collisionGroup );
 	enginetrace->TraceRay( ray, mask, &traceFilter, ptr );
-	/*if( r_visualizetraces.GetBool() )
+	if( r_visualizetraces->GetBool() )
 	{
 		DebugDrawLine( ptr->startpos, ptr->endpos, 255, 0, 0, true, -1.0f );
-	}*/
+	}
 }
 
 void CCSPlayer::FireBullet( 
 	Vector vecSrc,	// shooting postion
 	const QAngle &shootAngles,  //shooting angle
-	float vecSpread, // spread vector
-	float flDistance, // max distance 
 	int iPenetration, // how many obstacles can be penetrated
 	int iBulletType, // ammo type
 	int iDamage, // base damage
@@ -200,7 +203,14 @@ void CCSPlayer::FireBullet(
 	float fCurrentDamage = iDamage;   // damage of the bullet at it's current trajectory
 	float flCurrentDistance = 0.0;  //distance that the bullet has traveled so far
 
-	iPenetration = 20;
+	CWeaponCSBase* activeWeapon = GetActiveCSWeapon();
+	const CCSWeaponInfo* pWeaponinfo = activeWeapon->GetCSWpnData(); // We should be firing the active weapon, right?
+
+	float flDistance = pWeaponinfo->m_flRange;
+
+	if ( mp_penetration_override.GetBool() )
+		iPenetration = mp_penetration_override_num.GetInt();
+	//iPenetration = 20;
 		
 	Vector vecDirShooting, vecRight, vecUp;
 	AngleVectors( shootAngles, &vecDirShooting, &vecRight, &vecUp );
@@ -221,8 +231,8 @@ void CCSPlayer::FireBullet(
 
 	// add the spray 
 	Vector vecDir = vecDirShooting +
-	      x * vecSpread * vecRight +
-		  y * vecSpread * vecUp;
+	      x * vecRight +
+		  y * vecUp;
 
 	VectorNormalize( vecDir );
 
@@ -252,6 +262,8 @@ void CCSPlayer::FireBullet(
 	bool bFirstHit = true;
 
 	CBasePlayer *lastPlayerHit = NULL;
+
+	int iObjectsPenetrated = 0;
 
 	if( sv_showplayerhitboxes->GetInt() > 0 )
 	{
@@ -343,7 +355,7 @@ void CCSPlayer::FireBullet(
 			if ( tr.m_pEnt && tr.m_pEnt->IsPlayer() )
 			{
 				CBasePlayer *player = ToBasePlayer( tr.m_pEnt );
-				player->DrawServerHitboxes( 4, true );
+				player->DrawServerHitboxes( sv_showimpacts_time->GetFloat(), true );
 			}
 		}
 #endif
@@ -394,7 +406,7 @@ void CCSPlayer::FireBullet(
 				if ( !( tr.surface.flags & (SURF_SKY|SURF_NODRAW|SURF_HINT|SURF_SKIP) ) )
 				{
 					CBaseEntity *pEntity = tr.m_pEnt;
-					if ( !( /*!friendlyfire.GetBool() &&*/ pEntity && pEntity->GetTeamNumber() == GetTeamNumber() ) )
+					if ( !( !friendlyfire->GetBool() && pEntity && pEntity->GetTeamNumber() == GetTeamNumber() ) )
 					{
 						UTIL_ImpactTrace( &tr, iDamageType );
 					}
@@ -404,10 +416,15 @@ void CCSPlayer::FireBullet(
 
 		// add damage to entity that we hit
 		
-#ifndef CLIENT_DLL
+#ifndef CLIENT_DLL					 
 		ClearMultiDamage();
 
-		CTakeDamageInfo info( pevAttacker, pevAttacker, fCurrentDamage, iDamageType );
+		CTakeDamageInfo info( pevAttacker, pevAttacker, activeWeapon, fCurrentDamage, iDamageType, 0, iObjectsPenetrated );
+
+		info.SetAmmoType( iBulletType );
+		info.SetBulletID( GetBulletGroup() );
+		info.SetRecoilIndex( activeWeapon->GetRecoilIndex() );
+
 		CalculateBulletDamageForce( &info, iBulletType, vecDir, tr.endpos );
 		tr.m_pEnt->DispatchTraceAttack( info, vecDir, &tr );
 
@@ -427,7 +444,7 @@ void CCSPlayer::FireBullet(
 		Vector penetrationEnd;
 
 		// try to penetrate object, maximum penetration is 128 inch
-		if ( !TraceToExit( tr.endpos, vecDir, penetrationEnd, 24, 1280 ) )
+		if ( !TraceToExit( tr.endpos, vecDir, penetrationEnd, 24, mp_penetration_max_distance.GetInt() ) )
 			break;
 				
 		// find exact penetration exit
@@ -486,6 +503,8 @@ void CCSPlayer::FireBullet(
 
 		// reduce penetration counter
 		iPenetration--;
+
+		iObjectsPenetrated++;
 	}
 
 }		  

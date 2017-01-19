@@ -252,6 +252,8 @@ public:
 
 	virtual void			Operator_HandleAnimEvent( animevent_t *pEvent, CBaseCombatCharacter *pOperator );
 
+	float GetRecoilIndex();
+
 	CSWeaponMode m_weaponMode;
 	float	m_fAccuracyPenalty;
 
@@ -303,6 +305,11 @@ private:
 
 	int CSPlayerPad05;
 };
+
+inline float CWeaponCSBase::GetRecoilIndex()
+{
+	return m_flRecoilIndex;
+}
 
 
 #endif // WEAPON_CSBASE_H

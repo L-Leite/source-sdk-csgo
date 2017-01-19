@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 CCSPlayerStateInfo* g_pPlayerStateInfos = nullptr;
+int* CCSPlayer::s_BulletGroupCounter = nullptr;
 
 bool CCSPlayer::IsVIP() const
 {
