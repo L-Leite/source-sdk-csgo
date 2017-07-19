@@ -41,6 +41,8 @@ public:
 	virtual	void	DispatchAnimEvents ( CBaseAnimating *eventHandler );
 	virtual void	GetSkeleton( CStudioHdr *pStudioHdr, Vector pos[], QuaternionAligned q[], int boneMask );
 
+	virtual void BaseAnimatingOverlay00( int a1, int a2, int a3 );
+
 	int		AddGestureSequence( int sequence, bool autokill = true );
 	int		AddGestureSequence( int sequence, float flDuration, bool autokill = true );
 	int		AddGesture( Activity activity, bool autokill = true );

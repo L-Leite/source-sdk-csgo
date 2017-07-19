@@ -43,6 +43,8 @@ typedef enum {
 	// Add new shoot sound types here
 	REVERSE_THE_NEW_SOUND,
 
+	UNKNOWN_SOUND_TYPE_CSGO,
+
 	NUM_SHOOT_SOUND_TYPES,
 } WeaponSound_t;
 

@@ -79,7 +79,13 @@ void CBasePlayer::EyePositionAndVectors( Vector *pPosition, Vector *pForward,
 //-----------------------------------------------------------------------------
 bool CBasePlayer::SetFOV( CBaseEntity *pRequester, int FOV, float zoomRate, int iZoomStart /* = 0 */ )
 {
-	//NOTENOTE: You MUST specify who is requesting the zoom change
+	using fn_t = bool( __thiscall* )(CBasePlayer*, CBaseEntity*, int, /*float,*/ int);
+
+	__asm movss xmm0, zoomRate; // zoomRate is stored in xmm0 thanks to compiler optimizations
+
+	return ((fn_t) Addresses::SetFOV)(this, pRequester, FOV, /*zoomRate,*/ iZoomStart);
+
+	/*//NOTENOTE: You MUST specify who is requesting the zoom change
 	assert( pRequester != NULL );
 	if ( pRequester == NULL )
 		return false;
@@ -118,7 +124,7 @@ bool CBasePlayer::SetFOV( CBaseEntity *pRequester, int FOV, float zoomRate, int 
 
 	m_Local.m_flFOVRate = zoomRate;
 
-	return true;
+	return true;*/
 }
 
 int CBasePlayer::GetDefaultFOV( void ) const

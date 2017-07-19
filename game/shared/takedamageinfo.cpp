@@ -93,13 +93,21 @@ void CTakeDamageInfo::Set( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBas
 	Init( pInflictor, pAttacker, pWeapon, damageForce, damagePosition, vecReported, flDamage, bitsDamageType, iKillType, 0 );
 }
 
+CMultiDamage* GetMultiDamage()
+{
+	return *(CMultiDamage**) Addresses::MultiDamage;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Resets the global multi damage accumulator
 //-----------------------------------------------------------------------------
 void ClearMultiDamage( void )
 {
-	using fn_t = void( *)();
-	((fn_t) Addresses::ClearMultiDamage)();
+	/*using fn_t = void( *)();
+	((fn_t) Addresses::ClearMultiDamage)();*/
+
+	using fn_t = void(__thiscall*)(CMultiDamage*, CBaseEntity*, CBaseEntity*, CBaseEntity*, const Vector&, const Vector&, const Vector&, float, int, int, int);
+	((fn_t) Addresses::MultiDamageInit)(GetMultiDamage(), NULL, NULL, NULL, vec3_origin, vec3_origin, vec3_origin, 0, 0, 0, 0);
 }
 
 //-----------------------------------------------------------------------------

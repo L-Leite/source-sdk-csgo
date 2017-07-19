@@ -225,7 +225,6 @@ void CCSPlayer::ResetMaxSpeed()
 
 CWeaponCSBase* CCSPlayer::GetActiveCSWeapon() const
 {
-	// dont use dynamic_cast to not call our constructor
 	return static_cast< CWeaponCSBase* >(GetActiveWeapon());
 }
 

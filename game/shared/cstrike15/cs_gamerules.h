@@ -67,6 +67,7 @@ extern ConVar* mp_playerid;
 	#define CCSGameRulesProxy C_CSGameRulesProxy
 #endif
 
+CViewVectors* GetCSViewVectors();
 
 class CCSGameRulesProxy : public CGameRulesProxy
 {

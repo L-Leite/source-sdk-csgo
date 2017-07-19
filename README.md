@@ -1,5 +1,4 @@
-# source-sdk-csco
-Forked sdk from https://github.com/alliedmodders/hl2sdk/ edited for Classic Offensive
+# source-sdk-csgo
 
                SOURCE 1 SDK LICENSE
 

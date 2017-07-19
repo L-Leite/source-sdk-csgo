@@ -49,6 +49,7 @@ public:
 
 	virtual const CCSWeaponInfo* GetCSWpnData() const; // Get CS-specific weapon data.
 	virtual int		GetCSZoomLevel() const;
+	inline void SetCSZoomLevel( int zoomLevel ) { m_zoomLevel = zoomLevel; }
 
 	virtual bool	HasZoom();			   
 	virtual bool	DefaultPistolReload();		
@@ -72,8 +73,9 @@ public:
 protected: 
 	int m_zoomLevel;
 	int m_iBurstShotsRemaining;
+	float m_fNextBurstShotTime;
 
-	uint8_t CSBaseGunPad00[ 0x10 ];
+	uint8_t CSBaseGunPad00[ 0xC ];
 
 private:
 

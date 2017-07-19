@@ -189,10 +189,10 @@ inline void UTIL_TraceLineIgnoreTwoEntities( const Vector& vecAbsStart, const Ve
 
 void CCSPlayer::FireBullet( 
 	Vector vecSrc,	// shooting postion
-	const QAngle &shootAngles,  //shooting angle
-	int iPenetration, // how many obstacles can be penetrated
+	const QAngle &shootAngles,  //shooting angle	 	
 	int iBulletType, // ammo type
 	int iDamage, // base damage
+	float fPenetration, // how many obstacles can be penetrated
 	float flRangeModifier, // damage range modifier
 	CBaseEntity *pevAttacker, // shooter
 	bool bDoEffects,
@@ -204,12 +204,12 @@ void CCSPlayer::FireBullet(
 	float flCurrentDistance = 0.0;  //distance that the bullet has traveled so far
 
 	CWeaponCSBase* activeWeapon = GetActiveCSWeapon();
-	const CCSWeaponInfo* pWeaponinfo = activeWeapon->GetCSWpnData(); // We should be firing the active weapon, right?
+	const CCSWeaponInfo* pWeaponInfo = activeWeapon->GetCSWpnData(); // We should be firing the active weapon, right?
 
-	float flDistance = pWeaponinfo->m_flRange;
+	float flDistance = pWeaponInfo->m_flRange;
 
 	if ( mp_penetration_override.GetBool() )
-		iPenetration = mp_penetration_override_num.GetInt();
+		fPenetration = mp_penetration_override_num.GetFloat();
 	//iPenetration = 20;
 		
 	Vector vecDirShooting, vecRight, vecUp;
@@ -276,7 +276,7 @@ void CCSPlayer::FireBullet(
 			lagPlayer->DrawServerHitboxes(4, true);
 #endif
 		}
-	}
+	}				  
 
 	MDLCACHE_CRITICAL_SECTION();
 	while ( fCurrentDamage > 0 )
@@ -334,7 +334,7 @@ void CCSPlayer::FireBullet(
 			flDamageModifier = 0.99f;
 		}
 
-#ifdef CLIENT_DLL
+		#ifdef CLIENT_DLL
 		if ( sv_showimpacts.GetInt() == 1 || sv_showimpacts.GetInt() == 2 )
 		{
 			// draw red client impact markers
@@ -365,8 +365,8 @@ void CCSPlayer::FireBullet(
 		fCurrentDamage *= pow (flRangeModifier, (flCurrentDistance / 500));
 
 		// check if we reach penetration distance, no more penetrations after that
-		if (flCurrentDistance > flPenetrationDistance && iPenetration > 0)
-			iPenetration = 0;
+		if (flCurrentDistance > flPenetrationDistance && fPenetration > 0)
+			fPenetration = 0;
 
 #ifndef CLIENT_DLL
 		// This just keeps track of sounds for AIs (it doesn't play anything).
@@ -416,7 +416,7 @@ void CCSPlayer::FireBullet(
 
 		// add damage to entity that we hit
 		
-#ifndef CLIENT_DLL					 
+		#ifndef CLIENT_DLL
 		ClearMultiDamage();
 
 		CTakeDamageInfo info( pevAttacker, pevAttacker, activeWeapon, fCurrentDamage, iDamageType, 0, iObjectsPenetrated );
@@ -434,17 +434,17 @@ void CCSPlayer::FireBullet(
 #endif
 
 		// check if bullet can penetarte another entity
-		if ( iPenetration == 0 && !hitGrate )
+		if ( fPenetration == 0 && !hitGrate )
 			break; // no, stop
 
 		// If we hit a grate with iPenetration == 0, stop on the next thing we hit
-		if ( iPenetration < 0 )
+		if ( fPenetration < 0 )
 			break;
 
 		Vector penetrationEnd;
 
 		// try to penetrate object, maximum penetration is 128 inch
-		if ( !TraceToExit( tr.endpos, vecDir, penetrationEnd, 24, mp_penetration_max_distance.GetInt() ) )
+		if ( !TraceToExit( tr.endpos, vecDir, penetrationEnd, 24, mp_penetration_max_distance.GetFloat() ) )
 			break;
 				
 		// find exact penetration exit
@@ -499,12 +499,11 @@ void CCSPlayer::FireBullet(
 		flDistance = (flDistance - flCurrentDistance) * 0.5;
 
 		// reduce damage power each time we hit something other than a grate
-		fCurrentDamage *= flDamageModifier;
+		fCurrentDamage *= flDamageModifier;	
 
 		// reduce penetration counter
-		iPenetration--;
+		fPenetration--;
 
 		iObjectsPenetrated++;
 	}
-
 }		  

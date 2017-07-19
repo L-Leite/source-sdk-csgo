@@ -157,6 +157,8 @@ protected:
 
 extern CMultiDamage g_MultiDamage;
 
+CMultiDamage* GetMultiDamage();
+
 // Multidamage accessors
 void ClearMultiDamage( void );
 void ApplyMultiDamage( void );

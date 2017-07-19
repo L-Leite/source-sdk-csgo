@@ -273,7 +273,7 @@ void NDebugOverlay::Text( const Vector &origin, const char *text, bool bViewChec
 //-----------------------------------------------------------------------------
 // Purpose: Add debug overlay text with screen position
 //-----------------------------------------------------------------------------
-void NDebugOverlay::ScreenText( float flXpos, float flYpos, const char *text, int r, int g, int b, int a, float duration )
+void NDebugOverlay:: ScreenText( float flXpos, float flYpos, const char *text, int r, int g, int b, int a, float duration )
 {
 	if ( debugoverlay )
 	{

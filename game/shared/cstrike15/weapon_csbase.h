@@ -131,7 +131,7 @@ public:
 	virtual float	GetCycleTime() const;
 	virtual float	GetArmorRatio() const;
 	virtual bool	HasTraditionalScope() const;
-	virtual float	GetInaccuracyStand( bool bUseAlternative /*maybe?*/ ) const;
+	virtual float	GetInaccuracyStand( bool bUseAlternative /*?*/ ) const;
 	virtual float	GetInaccuracyCrouch( bool bUseAlternative /*?*/ ) const;
 	virtual bool	CannotShootUnderwater();
 	virtual float	GetRecoilMagnitude( bool bUseAlternative /*?*/ ) const;
@@ -155,8 +155,9 @@ public:
 	virtual CSWeaponType GetWeaponType() const;
 	virtual const char* GetDefinitionName() const;
 	virtual int		GetRecoilSeed();
-	virtual const CCSWeaponInfo* GetCSWpnData() const; // Get CS-specific weapon data. I'd rather use a pointer in order to not use any constructor
+	virtual const CCSWeaponInfo* GetCSWpnData() const; // Get CS-specific weapon data
 	virtual int		GetCSZoomLevel() const;
+
 	virtual CSWeaponID GetCSWeaponID() const;
 	virtual bool	IsSilenced( void ) const { return false; }	// return true if this weapon has a silencer equipped
 	virtual bool	HasSilencer() const;			  			   	
@@ -280,8 +281,7 @@ public:
 	void SetExtraAmmoCount( int count ) { m_iExtraPrimaryAmmo = count; }
 	int GetExtraAmmoCount( void ) { return m_iExtraPrimaryAmmo; }
 
-private:
-
+private:   
 	float	m_flDecreaseShotsFired;
 
 	CWeaponCSBase( const CWeaponCSBase & );
@@ -299,10 +299,13 @@ private:
 
 	float m_fLastShotTime;
 
-	uint8_t CSPlayerPad04[ 0xC ];
+	uint8_t CSPlayerPad04[ 0x8 ];
 
+public:
+	void* m_pIronSightController;
 	int m_iIronSightMode;
 
+private:
 	int CSPlayerPad05;
 };
 

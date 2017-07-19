@@ -59,6 +59,11 @@ const QAngle &CBasePlayer::EyeAngles()
 	return angEyeWorld;
 }
 
+void CBasePlayer::SetDefaultFOV( int FOV )
+{
+	m_iDefaultFOV = (FOV == 0) ? GameRules()->DefaultFOV() : FOV;
+}
+
 
 const QAngle &CBasePlayer::LocalEyeAngles()
 {

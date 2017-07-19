@@ -296,9 +296,9 @@ public:
 	void FireBullet( 
 		Vector vecSrc, 
 		const QAngle &shootAngles, 
-		int iPenetration, 
 		int iBulletType, 
 		int iDamage, 
+		float fPenetration,
 		float flRangeModifier, 
 		CBaseEntity *pevAttacker,
 		bool bDoEffects,
@@ -657,7 +657,9 @@ public:
 	bool m_bIsVIP;				// Are we the VIP?
 	int m_iNumSpawns;			// Number of times player has spawned this round
 
-	uint8 CSPlayerPad10[ 0x10 ];
+	CNetworkVar( int, m_nHeavyAssaultSuitCooldownRemaining );
+
+	uint8 CSPlayerPad10[ 0x14 ];
 
 	int m_iOldTeam;				// Keep what team they were last on so we can allow joining spec and switching back to their real team
 	
@@ -704,7 +706,7 @@ public:
 
 	uint8 CSPlayerPad13[ 0x80 ];
 
-	CNetworkArray( int, m_iMatchStarts_Kills, MATCH_STATS_MAX_ENTRIES );
+	CNetworkArray( int, m_iMatchStats_Kills, MATCH_STATS_MAX_ENTRIES );
 	CNetworkArray( int, m_iMatchStats_Damage, MATCH_STATS_MAX_ENTRIES );
 	CNetworkArray( int, m_iMatchStats_EquipmentValue, MATCH_STATS_MAX_ENTRIES );
 	CNetworkArray( int, m_iMatchStats_MoneySaved, MATCH_STATS_MAX_ENTRIES );
@@ -718,7 +720,7 @@ public:
 	CNetworkArray( int, m_iMatchStats_UtilityDamage, MATCH_STATS_MAX_ENTRIES );
 	CNetworkArray( int, m_iMatchStats_EnemiesFlashed, MATCH_STATS_MAX_ENTRIES );
 
-	uint8 CSPlayerPad14[ 0x8 ];
+	uint8 CSPlayerPad14[ 0x7D4 ];
 
 	int m_iBombSiteIndex;
 
@@ -967,11 +969,11 @@ public:
 
 	int m_iWeaponPurchasesThisRound;
 
-	uint8 CSPlayerPad27[ 0x1E0 ];
+	uint8 CSPlayerPad27[ 0x1E4 ];
 
 	int m_iControlledBotEntIndex;
 
-	uint8 CSPlayerPad28[ 0x99C ];
+	uint8 CSPlayerPad28[ 0xA14 ];
 
 	uint16 m_unCurrentEquipmentValue;
 	uint16 m_unRoundStartEquipmentValue;
